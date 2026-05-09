@@ -266,11 +266,20 @@ const [newQuestionTH, setNewQuestionTH] =
 
 
       }, [admins]);
-     
+     useEffect(() => {
+      localStorage.setItem(
+        "roomCheckData",
+        JSON.stringify(submissions)
+      );
+    }, [submissions]);
 
 
   // โหลดข้อมูลจาก localStorage
-  const [submissions, setSubmissions] = useState([]);
+  const [submissions, setSubmissions] = useState(() => {
+  const saved = localStorage.getItem("roomCheckData");
+
+  return saved ? JSON.parse(saved) : [];
+});
 
 
   // ค้นหาห้อง
@@ -2338,115 +2347,110 @@ const activePage = pagesData[currentPage];
 
 const styles = {
 
-
   /* ================= FORM ================= */
 
-
   container: {
-    maxWidth: 500,
+    maxWidth: 650,
     margin: "auto",
-    padding: 20,
-    fontFamily: "sans-serif"
+    padding: 25,
+    fontFamily: "Inter, sans-serif",
+    background: "#f8fafc",
+    minHeight: "100vh"
   },
-
 
   header: {
-    background: "#dbeafe",
-    padding: 20,
-    borderRadius: 20,
-    textAlign: "center"
+    background: "#ffffff",
+    padding: 25,
+    borderRadius: 24,
+    textAlign: "center",
+    boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
+    border: "1px solid #e2e8f0"
   },
-
 
   logo: {
     width: 100,
     marginBottom: 10
   },
 
-
   card: {
-    width: "100%",
-    padding: 12,
-    marginTop: 10,
-    borderRadius: 12,
-    border: "1px solid #dbeafe",
-    background: "#f8fbff",
-    outline: "none",
-    transition: "0.2s",
-    boxShadow: "0 6px 15px rgba(59,130,246,0.08)"
+    background: "#ffffff",
+    padding: 20,
+    marginTop: 18,
+    borderRadius: 22,
+    border: "1px solid #e2e8f0",
+    boxShadow: "0 4px 15px rgba(0,0,0,0.04)"
   },
-
 
   input: {
     width: "100%",
-    padding: 12,
+    padding: 14,
     marginTop: 10,
-    borderRadius: 12,
+    borderRadius: 14,
     border: "1px solid #dbeafe",
-    background: "#f8fbff",
+    background: "#f8fafc",
     outline: "none",
-    transition: "0.2s",
+    fontSize: 15,
     boxSizing: "border-box"
   },
 
-
   btn: {
     flex: 1,
-    padding: 12,
+    padding: 14,
     border: "none",
-    borderRadius: 12,
+    borderRadius: 14,
     cursor: "pointer",
-    fontWeight: "bold",
-    background: "#f1f5f9"
+    fontWeight: "600",
+    fontSize: 15,
+    transition: "0.2s"
   },
-
 
   navBtn: {
     flex: 1,
-    padding: 12,
+    padding: 14,
     border: "none",
-    borderRadius: 10,
-    background: "#3b82f6",
+    borderRadius: 14,
+    background: "#2563eb",
     color: "#fff",
-    cursor: "pointer"
+    cursor: "pointer",
+    fontWeight: "600",
+    fontSize: 15
   },
-
 
   submitBtn: {
     flex: 1,
-    padding: 12,
+    padding: 14,
     border: "none",
-    borderRadius: 10,
+    borderRadius: 14,
     background: "#10b981",
     color: "#fff",
-    cursor: "pointer"
+    cursor: "pointer",
+    fontWeight: "600",
+    fontSize: 15
   },
-
 
   progressWrap: {
-    height: 5,
-    background: "#eee",
-    borderRadius: 5,
-    margin: "15px 0"
+    height: 8,
+    background: "#e2e8f0",
+    borderRadius: 20,
+    margin: "20px 0",
+    overflow: "hidden"
   },
-
 
   progressIn: {
     height: "100%",
-    background: "#3b82f6",
-    borderRadius: 5
+    background:
+      "linear-gradient(90deg,#3b82f6,#60a5fa)",
+    borderRadius: 20,
+    transition: "0.3s"
   },
 
-
   /* ================= DROPDOWN ================= */
-
 
   dropdown: {
     position: "relative",
     marginTop: 8,
     marginBottom: 10
   },
-
 
   dropdownBox: {
     padding: "12px 15px",
@@ -2459,12 +2463,10 @@ const styles = {
     cursor: "pointer"
   },
 
-
   arrow: {
     transition: "0.3s",
     fontSize: 18
   },
-
 
   dropdownMenu: {
     position: "absolute",
@@ -2478,36 +2480,37 @@ const styles = {
     zIndex: 999
   },
 
-
   dropdownItem: {
     padding: "12px 15px",
     cursor: "pointer",
     borderBottom: "1px solid #f1f5f9"
   },
 
-
   /* ================= LOGIN ================= */
-
 
   loginContainer: {
     minHeight: "100vh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    background: "#eff6ff"
-  },
 
+    backgroundImage:
+      "linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url('/Room.png')",
+
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat"
+  },
 
   loginCard: {
     width: "100%",
-    maxWidth: 350,
+    maxWidth: 380,
     background: "#fff",
-    padding: 30,
-    borderRadius: 25,
+    padding: 35,
+    borderRadius: 30,
     textAlign: "center",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.08)"
+    boxShadow: "0 10px 35px rgba(0,0,0,0.08)"
   },
-
 
   loginInput: {
     width: "100%",
@@ -2519,52 +2522,50 @@ const styles = {
     boxSizing: "border-box"
   },
 
-
   loginBtn: {
     width: "100%",
     padding: 14,
     border: "none",
-    borderRadius: 12,
-    background: "#3b82f6",
+    borderRadius: 14,
+    background: "#2563eb",
     color: "#fff",
-    fontWeight: "bold",
-    cursor: "pointer"
+    fontWeight: "600",
+    cursor: "pointer",
+    fontSize: 15
   },
-
 
   formBtn: {
     width: "100%",
     padding: 14,
     border: "none",
-    borderRadius: 12,
+    borderRadius: 14,
     background: "#e0f2fe",
     color: "#0369a1",
-    fontWeight: "bold",
+    fontWeight: "600",
     cursor: "pointer",
-    marginTop: 10
+    marginTop: 12,
+    fontSize: 15
   },
-
 
   /* ================= REPORT ================= */
 
-
   reportCard: {
-    background: "#f8fbff",
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 10,
-    border: "1px solid #dbeafe",
-    fontSize: 14
+    background: "#ffffff",
+    padding: 18,
+    borderRadius: 18,
+    marginBottom: 15,
+    border: "1px solid #e2e8f0",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.04)"
   },
-
 
   detailPanel: {
-    background: "#fff",
-    padding: 20,
-    borderRadius: 15,
-    marginTop: 20
+    background: "#ffffff",
+    padding: 25,
+    borderRadius: 22,
+    marginTop: 20,
+    border: "1px solid #e2e8f0",
+    boxShadow: "0 4px 20px rgba(0,0,0,0.05)"
   },
-
 
   viewBtn: {
     padding: "7px 10px",
@@ -2576,19 +2577,15 @@ const styles = {
     cursor: "pointer"
   },
 
-
   /* ================= ADMIN ================= */
 
-
   sidebar: {
-    width: 220,
-    background: "#fff",
-    padding: 20,
-    borderRadius: 15,
-    minHeight: "100vh",
-    boxShadow: "0 5px 20px rgba(0,0,0,0.05)"
+    width: 240,
+    background: "#ffffff",
+    padding: 25,
+    borderRight: "1px solid #e2e8f0",
+    minHeight: "100vh"
   },
-
 
   sidebarLogo: {
     textAlign: "center",
@@ -2596,33 +2593,33 @@ const styles = {
     fontWeight: "bold"
   },
 
-
   menuItem: {
-    padding: 12,
-    borderRadius: 10,
-    marginBottom: 8,
+    padding: 14,
+    borderRadius: 14,
+    marginBottom: 10,
     cursor: "pointer",
+    color: "#334155",
     transition: "0.2s"
   },
 
-
   menuActive: {
-    padding: 12,
-    borderRadius: 10,
-    marginBottom: 8,
+    padding: 14,
+    borderRadius: 14,
+    marginBottom: 10,
     cursor: "pointer",
-    background: "#3b82f6",
+    background:
+      "linear-gradient(90deg,#3b82f6,#60a5fa)",
     color: "#fff",
-    fontWeight: "bold"
+    fontWeight: "600",
+    boxShadow: "0 4px 12px rgba(59,130,246,0.3)"
   },
-
 
   pageBox: {
-    background: "#fff",
-    padding: 20,
-    borderRadius: 15
+    background: "#ffffff",
+    padding: 25,
+    borderRadius: 25,
+    boxShadow: "0 4px 20px rgba(0,0,0,0.05)"
   },
-
 
   statsGrid: {
     display: "grid",
@@ -2631,14 +2628,12 @@ const styles = {
     marginBottom: 25
   },
 
-
   statsCard: {
     background: "#eff6ff",
     padding: 20,
     borderRadius: 15,
     textAlign: "center"
   },
-
 
   userCard: {
     padding: 15,
@@ -2647,11 +2642,9 @@ const styles = {
     marginBottom: 10
   },
 
-
   dashboardWrap: {
     padding: 20
   },
-
 
   dashboardHeader: {
     display: "flex",
@@ -2660,13 +2653,11 @@ const styles = {
     marginBottom: 20
   },
 
-
   cardTop: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center"
   },
-
 
   fancyCardBlue: {
     background: "linear-gradient(135deg,#7dd3fc,#dbeafe)",
@@ -2675,7 +2666,6 @@ const styles = {
     boxShadow: "0 5px 15px rgba(0,0,0,0.1)"
   },
 
-
   fancyCardGreen: {
     background: "linear-gradient(135deg,#34d399,#d1fae5)",
     padding: 25,
@@ -2683,14 +2673,12 @@ const styles = {
     boxShadow: "0 5px 15px rgba(0,0,0,0.1)"
   },
 
-
   fancyCardRed: {
     background: "linear-gradient(135deg,#fb7185,#fee2e2)",
     padding: 25,
     borderRadius: 25,
     boxShadow: "0 5px 15px rgba(0,0,0,0.1)"
   },
-
 
   fancyCardDark: {
     background: "linear-gradient(135deg,#0f766e,#134e4a)",
@@ -2700,13 +2688,11 @@ const styles = {
     boxShadow: "0 5px 15px rgba(0,0,0,0.1)"
   },
 
-
   detailGrid: {
     display: "grid",
     gridTemplateColumns: "1fr 1.3fr",
     gap: 20
   },
-
 
   graphCard: {
     background: "#fff",
@@ -2715,14 +2701,12 @@ const styles = {
     boxShadow: "0 5px 15px rgba(0,0,0,0.08)"
   },
 
-
   roomCard: {
     background: "#fff",
     borderRadius: 25,
     padding: 25,
     boxShadow: "0 5px 15px rgba(0,0,0,0.08)"
   },
-
 
   fakeGraph: {
     height: 120,
@@ -2732,7 +2716,6 @@ const styles = {
     overflow: "hidden",
     marginTop: 20
   },
-
 
   graphLine: {
     position: "absolute",
@@ -2744,7 +2727,6 @@ const styles = {
     borderRadius: 20
   },
 
-
   answerBox: {
     display: "flex",
     justifyContent: "space-between",
@@ -2755,7 +2737,6 @@ const styles = {
     fontWeight: "500"
   },
 
-
   logoutBtn: {
     padding: "10px 16px",
     border: "none",
@@ -2765,188 +2746,11 @@ const styles = {
     cursor: "pointer"
   },
 
-
   adminHeader: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 20
-  },
-  container: {
-  maxWidth: 650,
-  margin: "auto",
-  padding: 25,
-  fontFamily: "Inter, sans-serif",
-  background: "#f8fafc",
-  minHeight: "100vh"
-},
-header: {
-  background: "#ffffff",
-  padding: 25,
-  borderRadius: 24,
-  textAlign: "center",
-  boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
-  border: "1px solid #e2e8f0"
-},
-card: {
-  background: "#ffffff",
-  padding: 20,
-  marginTop: 18,
-  borderRadius: 22,
-  border: "1px solid #e2e8f0",
-  boxShadow: "0 4px 15px rgba(0,0,0,0.04)"
-},
-input: {
-  width: "100%",
-  padding: 14,
-  marginTop: 10,
-  borderRadius: 14,
-  border: "1px solid #dbeafe",
-  background: "#f8fafc",
-  outline: "none",
-  fontSize: 15,
-  boxSizing: "border-box"
-},
-btn: {
-  flex: 1,
-  padding: 14,
-  border: "none",
-  borderRadius: 14,
-  cursor: "pointer",
-  fontWeight: "600",
-  fontSize: 15,
-  transition: "0.2s"
-},
-navBtn: {
-  flex: 1,
-  padding: 14,
-  border: "none",
-  borderRadius: 14,
-  background: "#2563eb",
-  color: "#fff",
-  cursor: "pointer",
-  fontWeight: "600",
-  fontSize: 15
-},
-submitBtn: {
-  flex: 1,
-  padding: 14,
-  border: "none",
-  borderRadius: 14,
-  background: "#10b981",
-  color: "#fff",
-  cursor: "pointer",
-  fontWeight: "600",
-  fontSize: 15
-},
-progressWrap: {
-  height: 8,
-  background: "#e2e8f0",
-  borderRadius: 20,
-  margin: "20px 0",
-  overflow: "hidden"
-},
-progressIn: {
-  height: "100%",
-  background:
-    "linear-gradient(90deg,#3b82f6,#60a5fa)",
-  borderRadius: 20,
-  transition: "0.3s"
-},
-loginContainer: {
-  minHeight: "100vh",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-
-  backgroundImage:
-    "linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url('/Room.png')",
-
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat"
-},
-loginCard: {
-  width: "100%",
-  maxWidth: 380,
-  background: "#fff",
-  padding: 35,
-  borderRadius: 30,
-  textAlign: "center",
-  boxShadow: "0 10px 35px rgba(0,0,0,0.08)"
-},
-loginBtn: {
-  width: "100%",
-  padding: 14,
-  border: "none",
-  borderRadius: 14,
-  background: "#2563eb",
-  color: "#fff",
-  fontWeight: "600",
-  cursor: "pointer",
-  fontSize: 15
-},
-formBtn: {
-  width: "100%",
-  padding: 14,
-  border: "none",
-  borderRadius: 14,
-  background: "#e0f2fe",
-  color: "#0369a1",
-  fontWeight: "600",
-  cursor: "pointer",
-  marginTop: 12,
-  fontSize: 15
-},
-sidebar: {
-  width: 240,
-  background: "#ffffff",
-  padding: 25,
-  borderRight: "1px solid #e2e8f0",
-  minHeight: "100vh"
-},
-menuItem: {
-  padding: 14,
-  borderRadius: 14,
-  marginBottom: 10,
-  cursor: "pointer",
-  color: "#334155",
-  transition: "0.2s"
-},
-menuActive: {
-  padding: 14,
-  borderRadius: 14,
-  marginBottom: 10,
-  cursor: "pointer",
-  background:
-    "linear-gradient(90deg,#3b82f6,#60a5fa)",
-  color: "#fff",
-  fontWeight: "600",
-  boxShadow: "0 4px 12px rgba(59,130,246,0.3)"
-},
-pageBox: {
-  background: "#ffffff",
-  padding: 25,
-  borderRadius: 25,
-  boxShadow: "0 4px 20px rgba(0,0,0,0.05)"
-},
-reportCard: {
-  background: "#ffffff",
-  padding: 18,
-  borderRadius: 18,
-  marginBottom: 15,
-  border: "1px solid #e2e8f0",
-  boxShadow: "0 4px 12px rgba(0,0,0,0.04)"
-},
-detailPanel: {
-  background: "#ffffff",
-  padding: 25,
-  borderRadius: 22,
-  marginTop: 20,
-  border: "1px solid #e2e8f0",
-  boxShadow: "0 4px 20px rgba(0,0,0,0.05)"
-},
-
+  }
 
 };
-
