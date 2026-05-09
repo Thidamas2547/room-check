@@ -2334,12 +2334,13 @@ const activePage = pagesData[currentPage];
 
 }
 
-
+const isMobile = window.innerWidth < 768;
 const styles = {
 
   /* ================= FORM ================= */
 
   container: {
+    width: "100%",
     maxWidth: 650,
     margin: "auto",
     padding: 25,
@@ -2372,16 +2373,16 @@ const styles = {
   },
 
   input: {
-    width: "100%",
-    padding: 14,
-    marginTop: 10,
-    borderRadius: 14,
-    border: "1px solid #dbeafe",
-    background: "#f8fafc",
-    outline: "none",
-    fontSize: 15,
-    boxSizing: "border-box"
-  },
+  width: "100%",
+  padding: 14,
+  marginTop: 10,
+  borderRadius: 14,
+  border: "1px solid #dbeafe",
+  background: "#f8fafc",
+  outline: "none",
+  fontSize: 16,
+  boxSizing: "border-box"
+},
 
   btn: {
     flex: 1,
@@ -2496,7 +2497,8 @@ const styles = {
     width: "100%",
     maxWidth: 380,
     background: "#fff",
-    padding: 35,
+    padding: isMobile ? 20 : 35,
+    margin: 15,
     borderRadius: 30,
     textAlign: "center",
     boxShadow: "0 10px 35px rgba(0,0,0,0.08)"
@@ -2570,7 +2572,7 @@ const styles = {
   /* ================= ADMIN ================= */
 
   sidebar: {
-    width: 240,
+    width: isMobile ? 90 : 240,
     background: "#ffffff",
     padding: 25,
     borderRight: "1px solid #e2e8f0",
@@ -2584,36 +2586,41 @@ const styles = {
   },
 
   menuItem: {
-    padding: 14,
-    borderRadius: 14,
-    marginBottom: 10,
-    cursor: "pointer",
-    color: "#334155",
-    transition: "0.2s"
-  },
+  padding: 14,
+  borderRadius: 14,
+  marginBottom: 10,
+  cursor: "pointer",
+  color: "#334155",
+  transition: "0.2s",
+  fontSize: isMobile ? 12 : 15
+},
 
   menuActive: {
-    padding: 14,
-    borderRadius: 14,
-    marginBottom: 10,
-    cursor: "pointer",
-    background:
-      "linear-gradient(90deg,#3b82f6,#60a5fa)",
-    color: "#fff",
-    fontWeight: "600",
-    boxShadow: "0 4px 12px rgba(59,130,246,0.3)"
-  },
+  padding: 14,
+  borderRadius: 14,
+  marginBottom: 10,
+  cursor: "pointer",
+  background:
+    "linear-gradient(90deg,#3b82f6,#60a5fa)",
+  color: "#fff",
+  fontWeight: "600",
+  boxShadow: "0 4px 12px rgba(59,130,246,0.3)",
+  fontSize: isMobile ? 12 : 15
+},
 
   pageBox: {
-    background: "#ffffff",
-    padding: 25,
-    borderRadius: 25,
-    boxShadow: "0 4px 20px rgba(0,0,0,0.05)"
-  },
+  background: "#ffffff",
+  padding: 25,
+  borderRadius: 25,
+  boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
+  overflowX: "auto"
+},
 
   statsGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(4,1fr)",
+  display: "grid",
+  gridTemplateColumns: isMobile
+    ? "1fr"
+    : "repeat(4,1fr)",
     gap: 20,
     marginBottom: 25
   },
@@ -2637,11 +2644,13 @@ const styles = {
   },
 
   dashboardHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 20
-  },
+  display: "flex",
+  flexDirection: isMobile ? "column" : "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: 10,
+  marginBottom: 20
+},
 
   cardTop: {
     display: "flex",
@@ -2679,8 +2688,10 @@ const styles = {
   },
 
   detailGrid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1.3fr",
+  display: "grid",
+  gridTemplateColumns: isMobile
+    ? "1fr"
+    : "1fr 1.3fr",
     gap: 20
   },
 
