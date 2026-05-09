@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
 
+
 /* ================= DATA ================= */
-const pages = [
+const defaultPages = [
+
+
 
 
   { title: "📋 Room Information - ข้อมูลห้อง",
     type: "form"
   },
 
+
   /* ================= ENTRANCE ================= */
+
 
   {
     title: "🏡 Entrance - ทางเข้า",
@@ -27,7 +32,9 @@ const pages = [
     ]
   },
 
+
   /* ================= INROOM ================= */
+
 
   {
     title: "🛋️ Inroom - ภายในห้องพัก",
@@ -44,7 +51,9 @@ const pages = [
     ]
   },
 
+
   /* ================= BEDROOM ================= */
+
 
   {
     title: "🛏️ Bedroom - ภายในห้องนอน",
@@ -67,7 +76,9 @@ const pages = [
     ]
   },
 
+
   /* ================= BALCONY ================= */
+
 
   {
     title: "🌅 Balcony - ทางออกระเบียง",
@@ -87,7 +98,9 @@ const pages = [
     ]
   },
 
+
   /* ================= BATHROOM ================= */
+
 
   {
     title: "🚿 Bathroom - ภายในห้องน้ำ",
@@ -127,7 +140,9 @@ const pages = [
     ]
   },
 
+
   /* ================= PANTRY ================= */
+
 
   {
     title: "🍳 Pantry on the third floor - ห้องครัวชั้น 3",
@@ -140,7 +155,9 @@ const pages = [
     ]
   },
 
+
   /* ================= LIVING ROOM ================= */
+
 
   {
     title: "🛋️ Living room - ห้องนั่งเล่นชั้น 3",
@@ -160,7 +177,9 @@ const pages = [
     ]
   },
 
+
   /* ================= OTHER ================= */
+
 
   {
     title: "📝 Other - อื่นๆ",
@@ -171,24 +190,60 @@ const pages = [
     ]
   }
 
+
 ];
+
+
 
 
 /* ================= APP ================= */
 /* ================= APP ================= */
 export default function App() {
+  const [pagesData, setPagesData] = useState(() => {
+  const saved = localStorage.getItem("pagesData");
+
+
+  return saved
+    ? JSON.parse(saved)
+    : defaultPages;
+});
+
+
+useEffect(() => {
+  localStorage.setItem(
+    "pagesData",
+    JSON.stringify(pagesData)
+  );
+}, [pagesData]);
+
+
+const [newPageTitle, setNewPageTitle] =
+  useState("");
+
+
+const [newQuestion, setNewQuestion] =
+  useState("");
+
+
+const [newQuestionTH, setNewQuestionTH] =
+  useState("");
+
 
   const [currentPage, setCurrentPage] = useState(0);
 
+
   const [isLogin, setIsLogin] = useState(false);
+
 
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [newAdminUser, setNewAdminUser] = useState("");
   const [newAdminPass, setNewAdminPass] = useState("");
 
+
   const [admins, setAdmins] = useState(() => {
   const saved = localStorage.getItem("admins");
+
 
   return saved
     ? JSON.parse(saved)
@@ -200,43 +255,44 @@ export default function App() {
       ];
 });
 
+
       useEffect(() => {
+
 
         localStorage.setItem(
           "admins",
           JSON.stringify(admins)
         );
 
+
       }, [admins]);
+     
+
 
   // โหลดข้อมูลจาก localStorage
-  const [submissions, setSubmissions] = useState(() => {
-  const saved = localStorage.getItem("roomCheckData");
-  return saved ? JSON.parse(saved) : [];
-});
+  const [submissions, setSubmissions] = useState([]);
 
-useEffect(() => {
-  localStorage.setItem(
-    "roomCheckData",
-    JSON.stringify(submissions)
-  );
-}, [submissions]);
 
   // ค้นหาห้อง
   const [searchRoom, setSearchRoom] = useState("");
 
+
   // ดูรายละเอียด
   const [selectedReport, setSelectedReport] = useState(null);
+
 
   // เมนู sidebar
   const [activeMenu, setActiveMenu] = useState("forms");
 
+
   // dropdown animation
   const [showDropdown, setShowDropdown] = useState(false);
+
 
   // answers/comments
   const [answers, setAnswers] = useState({});
   const [comments, setComments] = useState({});
+
 
   // room info
   const [info, setInfo] = useState({
@@ -247,9 +303,12 @@ useEffect(() => {
     position: ""
   });
 
+
   /* ================= LOGIN ================= */
 
+
  const handleLogin = () => {
+
 
   const foundAdmin = admins.find(
     (a) =>
@@ -257,24 +316,34 @@ useEffect(() => {
       a.password === password
   );
 
+
   if (foundAdmin) {
+
 
     setIsLogin("admin");
 
+
   } else {
+
 
     alert("❌ Username หรือ Password ไม่ถูกต้อง");
 
+
   }
+
 
 };
 
+
   /* ================= SUBMIT ================= */
+
 
   const handleSubmit = () => {
 
+
   const data = {
     id: Date.now(),
+
 
     info: {
       room: info.room,
@@ -284,18 +353,23 @@ useEffect(() => {
       position: info.position
     },
 
+
     answers,
     comments
   };
 
+
   // บันทึกเข้า submissions
   setSubmissions((prev) => [data, ...prev]);
 
+
   alert("✅ ส่งแบบประเมินเรียบร้อย!");
+
 
   // รีเซ็ตฟอร์ม
   setAnswers({});
   setComments({});
+
 
   setInfo({
     room: "",
@@ -305,17 +379,23 @@ useEffect(() => {
     position: ""
   });
 
+
   setCurrentPage(0);
+
 
   // กลับหน้า login
   setIsLogin(false);
 };
 
+
   /* ================= ADMIN PAGE ================= */
+
 
   if (isLogin === "admin") {
 
+
     return (
+
 
       <div
         style={{
@@ -325,10 +405,13 @@ useEffect(() => {
         }}
       >
 
+
         {/* SIDEBAR */}
         <div style={styles.sidebar}>
 
+
           <div style={styles.sidebarLogo}>
+
 
             <img
               src="/logo.png"
@@ -336,9 +419,12 @@ useEffect(() => {
               style={{ width: 60 }}
             />
 
+
             <h3>Muang Samui</h3>
 
+
           </div>
+
 
           <div
             style={
@@ -351,6 +437,7 @@ useEffect(() => {
             🏠 Overview
           </div>
 
+
           <div
             style={
               activeMenu === "users"
@@ -361,6 +448,7 @@ useEffect(() => {
           >
             👥 User Management
           </div>
+
 
           <div
             style={
@@ -373,6 +461,7 @@ useEffect(() => {
             📋 Form Responses
           </div>
 
+
           <div
             style={
               activeMenu === "reports"
@@ -384,6 +473,7 @@ useEffect(() => {
             📊 Reports
           </div>
 
+
           <div
             style={
               activeMenu === "settings"
@@ -394,15 +484,31 @@ useEffect(() => {
           >
             ⚙️ Settings
           </div>
+          <div
+            style={
+              activeMenu === "manageForms"
+                ? styles.menuActive
+                : styles.menuItem
+            }
+            onClick={() => setActiveMenu("manageForms")}
+          >
+            📝 Manage Forms
+          </div>
+         
+
 
         </div>
+
 
         {/* CONTENT */}
         <div style={{ flex: 1, padding: 20 }}>
 
+
           <div style={styles.adminHeader}>
 
+
             <h2>Admin Dashboard</h2>
+
 
             <button
               style={styles.logoutBtn}
@@ -411,24 +517,30 @@ useEffect(() => {
               Logout
             </button>
 
+
           </div>
+
 
  {/* 📊 OVERVIEW DASHBOARD */}
 {activeMenu === "overview" && (
   <div style={styles.dashboardWrap}>
+
 
     <div style={styles.dashboardHeader}>
       <h1 style={{ margin: 0 }}>
         📋 Admin Dashboard
       </h1>
 
+
       <div style={{ fontSize: 28 }}>
         👋 Hello, Admin !
       </div>
     </div>
 
+
     {/* STATS */}
     <div style={styles.statsGrid}>
+
 
       <div style={styles.fancyCardBlue}>
         <div style={styles.cardTop}>
@@ -436,12 +548,15 @@ useEffect(() => {
           <span style={{ fontSize: 40 }}>📄</span>
         </div>
 
+
         <h3>Total Reports</h3>
+
 
         <p>
           จำนวนแบบประเมินทั้งหมด
         </p>
       </div>
+
 
       <div style={styles.fancyCardGreen}>
         <div style={styles.cardTop}>
@@ -449,12 +564,15 @@ useEffect(() => {
           <span style={{ fontSize: 40 }}>✅</span>
         </div>
 
+
         <h3>Completed Checks</h3>
+
 
         <p>
           ห้องที่ตรวจผ่าน
         </p>
       </div>
+
 
       <div style={styles.fancyCardRed}>
         <div style={styles.cardTop}>
@@ -466,15 +584,19 @@ useEffect(() => {
             }
           </h1>
 
+
           <span style={{ fontSize: 40 }}>⚠️</span>
         </div>
 
+
         <h3>Problem Rooms</h3>
+
 
         <p>
           จำนวนห้องที่มีปัญหา
         </p>
       </div>
+
 
       <div style={styles.fancyCardDark}>
         <div style={styles.cardTop}>
@@ -482,58 +604,77 @@ useEffect(() => {
           <span style={{ fontSize: 40 }}>📝</span>
         </div>
 
+
         <h3>Total Forms</h3>
+
 
         <p>
           จำนวนแบบฟอร์มทั้งหมด
         </p>
       </div>
 
+
     </div>
+
 
     {/* DETAIL AREA */}
     <div style={styles.detailGrid}>
 
+
       {/* LEFT */}
       <div style={styles.graphCard}>
 
+
         <h2>📈 Report Trends</h2>
+
 
         <div style={styles.fakeGraph}>
           <div style={styles.graphLine}></div>
         </div>
 
+
         {submissions[0] && (
           <div style={{ marginTop: 25 }}>
 
+
             <p>👤 {submissions[0].info.name}</p>
+
 
             <p>🧑‍💼 {submissions[0].info.position}</p>
 
+
             <p>📅 {submissions[0].info.date}</p>
 
+
             <p>⏰ {submissions[0].info.time}</p>
+
 
           </div>
         )}
 
+
       </div>
+
 
       {/* RIGHT */}
       <div style={styles.roomCard}>
+
 
         <h1>
           🏠 Room {submissions[0]?.info.room || "-"} Inspection
         </h1>
 
+
         {submissions[0] &&
           Object.entries(submissions[0].answers).map(
             ([q, a], i) => (
+
 
               <div
                 key={i}
                 style={{
                   ...styles.answerBox,
+
 
                   background:
                     a === "Yes"
@@ -542,9 +683,11 @@ useEffect(() => {
                 }}
               >
 
+
                 <div>
                   {a === "Yes" ? "✅" : "❌"} {q}
                 </div>
+
 
                 <div
                   style={{
@@ -554,26 +697,36 @@ useEffect(() => {
                   {a}
                 </div>
 
+
               </div>
+
 
             )
           )}
 
+
       </div>
 
+
     </div>
+
 
   </div>
 )}
 
+
           {/* USERS */}
           {activeMenu === "users" && (
 
+
             <div style={styles.pageBox}>
+
 
               <h2>User Management</h2>
 
+
               {submissions.map((item, index) => (
+
 
                 <div
                   key={index}
@@ -582,18 +735,25 @@ useEffect(() => {
                   👤 {item.info.name}
                 </div>
 
+
               ))}
+
 
             </div>
 
+
           )}
+
 
           {/* FORMS */}
           {activeMenu === "forms" && (
 
+
             <div style={styles.pageBox}>
 
+
               <h2>Form Responses</h2>
+
 
               <input
                 style={styles.input}
@@ -603,6 +763,7 @@ useEffect(() => {
                   setSearchRoom(e.target.value)
                 }
               />
+
 
               {submissions
                 .filter((item) =>
@@ -614,20 +775,27 @@ useEffect(() => {
                 )
                 .map((item, index) => (
 
+
                   <div
                     key={index}
                     style={styles.reportCard}
                   >
 
+
                    <h3>🏠 Room: {item.info.room}</h3>
+
 
                   <p>👤 {item.info.name}</p>
 
+
                   <p>📅 {item.info.date}</p>
+
 
                   <p>⏰ {item.info.time}</p>
 
+
                   <p>💼 {item.info.position}</p>
+
 
                   <button
                     style={styles.viewBtn}
@@ -638,18 +806,25 @@ useEffect(() => {
                     View
                   </button>
 
+
                   </div>
+
 
                 ))}
 
+
             </div>
 
+
           )}
+
 
           {/* REPORTS */}
 {activeMenu === "reports" && (
 
+
   <div style={styles.pageBox}>
+
 
     <h1
       style={{
@@ -660,8 +835,10 @@ useEffect(() => {
       📊 Reports Dashboard
     </h1>
 
+
     {/* TOP CARDS */}
     <div style={styles.statsGrid}>
+
 
       <div
         style={{
@@ -675,12 +852,15 @@ useEffect(() => {
           </span>
         </div>
 
+
         <h3>Total Reports</h3>
+
 
         <p>
           จำนวนแบบประเมินทั้งหมด
         </p>
       </div>
+
 
       <div
         style={{
@@ -697,17 +877,21 @@ useEffect(() => {
             }
           </h1>
 
+
           <span style={{ fontSize: 45 }}>
             ✅
           </span>
         </div>
 
+
         <h3>Completed Checks</h3>
+
 
         <p>
           ห้องที่ตรวจผ่าน
         </p>
       </div>
+
 
       <div
         style={{
@@ -724,17 +908,21 @@ useEffect(() => {
             }
           </h1>
 
+
           <span style={{ fontSize: 45 }}>
             ⚠️
           </span>
         </div>
 
+
         <h3>Problem Rooms</h3>
+
 
         <p>
           ห้องที่พบปัญหา
         </p>
       </div>
+
 
       <div
         style={{
@@ -746,19 +934,24 @@ useEffect(() => {
             {submissions.length}
           </h1>
 
+
           <span style={{ fontSize: 45 }}>
             🏨
           </span>
         </div>
 
+
         <h3>Hotel Rooms</h3>
+
 
         <p>
           สรุปรายงานทั้งหมด
         </p>
       </div>
 
+
     </div>
+
 
     {/* REPORT LIST */}
     <div
@@ -767,11 +960,14 @@ useEffect(() => {
       }}
     >
 
+
       <h2 style={{ marginBottom: 20 }}>
         📝 Latest Reports
       </h2>
 
+
       {submissions.map((item, index) => (
+
 
         <div
           key={index}
@@ -787,6 +983,7 @@ useEffect(() => {
           }}
         >
 
+
           <div
             style={{
               display: "flex",
@@ -796,7 +993,9 @@ useEffect(() => {
             }}
           >
 
+
             <div>
+
 
               <h2
                 style={{
@@ -806,23 +1005,29 @@ useEffect(() => {
                 🏠 Room {item.info.room}
               </h2>
 
+
               <p>
                 👤 <b>{item.info.name}</b>
               </p>
+
 
               <p>
                 📅 {item.info.date}
               </p>
 
+
               <p>
                 ⏰ {item.info.time}
               </p>
+
 
               <p>
                 💼 {item.info.position}
               </p>
 
+
             </div>
+
 
             <div
               style={{
@@ -832,7 +1037,9 @@ useEffect(() => {
               🏨
             </div>
 
+
           </div>
+
 
           <div
             style={{
@@ -841,6 +1048,7 @@ useEffect(() => {
               gap: 10
             }}
           >
+
 
             <button
               style={{
@@ -859,31 +1067,510 @@ useEffect(() => {
               👁 View Report
             </button>
 
+
           </div>
+
 
         </div>
 
+
       ))}
+
 
     </div>
 
+
   </div>
+
+
+)}
+{/* MANAGE FORMS */}
+{activeMenu === "manageForms" && (
+
+
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "350px 1fr",
+      gap: 20
+    }}
+  >
+
+
+    {/* LEFT */}
+    <div>
+
+
+      {/* ADD FORM */}
+      <div style={styles.pageBox}>
+
+
+        <h2 style={{ marginBottom: 20 }}>
+          ➕ เพิ่มหมวดหมู่ใหม่
+        </h2>
+
+
+        <input
+          style={styles.input}
+          placeholder="ชื่อหมวดหมู่"
+          value={newPageTitle}
+          onChange={(e) =>
+            setNewPageTitle(e.target.value)
+          }
+        />
+
+
+        <input
+          style={styles.input}
+          placeholder="Question English"
+          value={newQuestion}
+          onChange={(e) =>
+            setNewQuestion(e.target.value)
+          }
+        />
+
+
+        <input
+          style={styles.input}
+          placeholder="คำถามภาษาไทย"
+          value={newQuestionTH}
+          onChange={(e) =>
+            setNewQuestionTH(e.target.value)
+          }
+        />
+
+
+        <button
+          style={{
+            ...styles.loginBtn,
+            marginTop: 15
+          }}
+          onClick={() => {
+
+
+            if (
+              !newPageTitle ||
+              !newQuestion ||
+              !newQuestionTH
+            ) {
+              alert("❌ กรุณากรอกข้อมูล");
+              return;
+            }
+
+
+            const newPage = {
+              title: newPageTitle,
+              items: [
+                [newQuestion, newQuestionTH]
+              ]
+            };
+
+
+            setPagesData([
+              ...pagesData,
+              newPage
+            ]);
+
+
+            setNewPageTitle("");
+            setNewQuestion("");
+            setNewQuestionTH("");
+
+
+            alert("✅ เพิ่มแบบสอบถามแล้ว");
+
+
+          }}
+        >
+          ➕ Add Category
+        </button>
+
+
+      </div>
+
+
+      {/* SUMMARY */}
+      <div
+        style={{
+          ...styles.pageBox,
+          marginTop: 20
+        }}
+      >
+
+
+        <h3>📋 หมวดหมู่ทั้งหมด</h3>
+
+
+        {pagesData.map((page, index) => (
+
+
+          <div
+            key={index}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "10px 0",
+              borderBottom:
+                "1px solid #e2e8f0"
+            }}
+          >
+
+
+            <span>{page.title}</span>
+
+
+            <b>
+              {page.items?.length || 0}
+            </b>
+
+
+          </div>
+
+
+        ))}
+
+
+      </div>
+
+
+    </div>
+
+
+    {/* RIGHT */}
+    <div style={styles.pageBox}>
+
+
+      <h2 style={{ marginBottom: 20 }}>
+        📝 รายการหมวดหมู่และคำถามทั้งหมด
+      </h2>
+
+
+      {pagesData.map((page, index) => (
+
+
+  <div
+    key={index}
+    style={{
+      background: "#fff",
+      border: "1px solid #e2e8f0",
+      borderRadius: 18,
+      padding: 20,
+      marginBottom: 15,
+      boxShadow:
+        "0 4px 12px rgba(0,0,0,0.04)"
+    }}
+  >
+
+
+    {/* HEADER */}
+    <div
+      style={{
+        display: "flex",
+        justifyContent:
+          "space-between",
+        alignItems: "center",
+        cursor: "pointer"
+      }}
+      onClick={() => {
+
+
+        setPagesData(
+          pagesData.map((p, i) => {
+
+
+            if (i === index) {
+
+
+              return {
+                ...p,
+                open: !p.open
+              };
+
+
+            }
+
+
+            return p;
+
+
+          })
+        );
+
+
+      }}
+    >
+
+
+      <div>
+
+
+        <h3 style={{ margin: 0 }}>
+          {page.title}
+        </h3>
+
+
+        <p
+          style={{
+            color: "#64748b",
+            marginTop: 5
+          }}
+        >
+          {page.items?.length || 0} Questions
+        </p>
+
+
+      </div>
+
+
+      <div
+        style={{
+          display: "flex",
+          gap: 10,
+          alignItems: "center"
+        }}
+      >
+
+        {/* DELETE CATEGORY */}
+        <button
+          style={{
+            background: "#ef4444",
+            color: "#fff",
+            border: "none",
+            padding: "8px 12px",
+            borderRadius: 8,
+            cursor: "pointer",
+            fontWeight: "bold"
+          }}
+          onClick={(e) => {
+
+            e.stopPropagation();
+
+            const confirmDelete =
+              window.confirm(
+                "ต้องการลบหมวดหมู่นี้ ?"
+              );
+
+            if (!confirmDelete) return;
+
+            const updated =
+              pagesData.filter(
+                (_, i) => i !== index
+              );
+
+            setPagesData(updated);
+
+          }}
+        >
+          🗑
+        </button>
+
+        <div
+          style={{
+            fontSize: 24,
+            fontWeight: "bold"
+          }}
+        >
+          {page.open ? "▲" : "▼"}
+        </div>
+
+</div>
+
+
+    </div>
+
+
+    {/* QUESTION LIST */}
+    {page.open && (
+
+
+      <div style={{ marginTop: 20 }}>
+
+
+        {page.items?.map((q, qIndex) => (
+
+
+  <div
+    key={qIndex}
+    style={{
+      background: "#f8fafc",
+      border: "1px solid #e2e8f0",
+      borderRadius: 12,
+      padding: 12,
+      marginBottom: 10
+    }}
+  >
+
+
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center"
+      }}
+    >
+
+
+      <div>
+
+
+        <div
+          style={{
+            fontWeight: "bold",
+            marginBottom: 5
+          }}
+        >
+          {qIndex + 1}. {q[0]}
+        </div>
+
+
+        <div
+          style={{
+            color: "#64748b",
+            fontSize: 14
+          }}
+        >
+          {q[1]}
+        </div>
+
+
+      </div>
+
+
+      <div
+        style={{
+          display: "flex",
+          gap: 8
+        }}
+      >
+
+
+        {/* EDIT */}
+        <button
+          style={{
+            background: "#3b82f6",
+            color: "#fff",
+            border: "none",
+            padding: "8px 12px",
+            borderRadius: 8,
+            cursor: "pointer",
+            fontWeight: "bold"
+          }}
+          onClick={() => {
+
+
+            const eng = prompt(
+              "Edit English Question",
+              q[0]
+            );
+
+
+            const th = prompt(
+              "แก้ไขคำถามภาษาไทย",
+              q[1]
+            );
+
+
+            if (!eng || !th) return;
+
+
+            const updated = [...pagesData];
+
+
+            updated[index].items[qIndex] = [
+              eng,
+              th
+            ];
+
+
+            setPagesData(updated);
+
+
+          }}
+        >
+          ✏️
+        </button>
+
+
+        {/* DELETE */}
+        <button
+          style={{
+            background: "#ef4444",
+            color: "#fff",
+            border: "none",
+            padding: "8px 12px",
+            borderRadius: 8,
+            cursor: "pointer",
+            fontWeight: "bold"
+          }}
+          onClick={() => {
+
+
+            const updated = [...pagesData];
+
+
+            updated[index].items =
+              updated[index].items.filter(
+                (_, i) => i !== qIndex
+              );
+
+
+            setPagesData(updated);
+
+
+          }}
+                >
+          🗑
+        </button>
+
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+))}
+
+
+      </div>
+
+
+    )}
+
+
+  </div>
+
+
+))}
+
+
+    </div>
+
+
+  </div>
+
 
 )}
 
-{/* SETTINGS */}
 
+{/* SETTINGS */}
 {activeMenu === "settings" && (
   <div style={styles.pageBox}>
 
+
     <h2>⚙️ Settings</h2>
+
 
     {/* ADMIN ACCOUNT */}
     <div style={styles.card}>
 
+
       <h3>👑 Admin Accounts</h3>
 
+
       {admins.map((admin, i) => (
+
 
         <div
           key={i}
@@ -899,19 +1586,24 @@ useEffect(() => {
           }}
         >
 
+
           <div>
+
 
             <p>
               👤 Username :
               <b> {admin.username}</b>
             </p>
 
+
             <p>
               🔑 Password :
               <b> {admin.password}</b>
             </p>
 
+
           </div>
+
 
           <button
             style={{
@@ -925,37 +1617,50 @@ useEffect(() => {
             }}
             onClick={() => {
 
+
               if (admins.length === 1) {
+
 
                 alert("❌ ต้องมีแอดมินอย่างน้อย 1 คน");
                 return;
 
+
               }
+
 
               const updatedAdmins =
                 admins.filter(
                   (_, index) => index !== i
                 );
 
+
               setAdmins(updatedAdmins);
 
+
               alert("🗑 ลบแอดมินแล้ว");
+
 
             }}
           >
             🗑 Delete
           </button>
 
+
         </div>
+
 
       ))}
 
+
     </div>
+
 
     {/* CREATE ADMIN */}
     <div style={styles.card}>
 
+
       <h3>➕ Create New Admin</h3>
+
 
       <input
         style={styles.input}
@@ -966,6 +1671,7 @@ useEffect(() => {
         }
       />
 
+
       <input
         style={styles.input}
         placeholder="New Password"
@@ -975,6 +1681,7 @@ useEffect(() => {
         }
       />
 
+
       <button
         style={{
           ...styles.loginBtn,
@@ -982,27 +1689,35 @@ useEffect(() => {
         }}
         onClick={() => {
 
+
           if (
             !newAdminUser ||
             !newAdminPass
           ) {
 
+
             alert("❌ กรอกข้อมูลให้ครบ");
             return;
 
+
           }
+
 
           const already = admins.find(
             (a) =>
               a.username === newAdminUser
           );
 
+
           if (already) {
+
 
             alert("❌ Username นี้มีแล้ว");
             return;
 
+
           }
+
 
           setAdmins([
             ...admins,
@@ -1012,27 +1727,35 @@ useEffect(() => {
             }
           ]);
 
+
           alert("✅ เพิ่มแอดมินสำเร็จ");
+
 
           setNewAdminUser("");
           setNewAdminPass("");
+
 
         }}
       >
         ➕ Add Admin
       </button>
 
+
     </div>
+
 
     {/* DATABASE */}
     <div style={styles.card}>
 
+
       <h3>🗂 Database</h3>
+
 
       <p>
         📋 Total Stored Forms :
         <b> {submissions.length}</b>
       </p>
+
 
       <button
         style={{
@@ -1041,28 +1764,37 @@ useEffect(() => {
         }}
         onClick={() => {
 
+
           localStorage.removeItem(
             "roomCheckData"
           );
 
+
           setSubmissions([]);
 
+
           alert("🗑 ลบข้อมูลทั้งหมดแล้ว");
+
 
         }}
       >
         🗑 Delete All Data
       </button>
 
+
     </div>
+
 
   </div>
 )}
 
+
           {/* DETAIL */}
          {selectedReport && (
 
+
           <div style={styles.detailPanel}>
+
 
             <div
               style={{
@@ -1072,9 +1804,11 @@ useEffect(() => {
               }}
             >
 
+
               <h2>
                 Room {selectedReport.info.room}
               </h2>
+
 
               <button
                 style={{
@@ -1091,11 +1825,14 @@ useEffect(() => {
                 ✖ Close
               </button>
 
+
             </div>
+
 
               {Object.entries(
                 selectedReport.answers
               ).map(([q, a], i) => (
+
 
                 <div
                   key={i}
@@ -1110,7 +1847,9 @@ useEffect(() => {
                   }}
                 >
 
+
                   <b>{q}</b>
+
 
                   <div>
                     {a === "Yes"
@@ -1118,35 +1857,50 @@ useEffect(() => {
                       : "❌ No"}
                   </div>
 
+
                   <small>
                     {selectedReport.comments[q]}
                   </small>
 
+
                 </div>
+
 
               ))}
 
+
             </div>
+
 
           )}
 
+
         </div>
+
 
       </div>
 
+
     );
+
 
   }
 
+
   /* ================= LOGIN PAGE ================= */
+
 
   if (!isLogin) {
 
+
     return (
+
 
       <div style={styles.loginContainer}>
 
+
         <div style={styles.loginCard}>
+
 
           <img
             src="/logo.png"
@@ -1154,13 +1908,16 @@ useEffect(() => {
             style={{ width: 120, marginBottom: 15 }}
           />
 
+
           <h2 style={{ marginBottom: 10 }}>
             💙 Muang Samui Group
           </h2>
 
+
           <p style={{ color: "#666", marginBottom: 20 }}>
             Room Check List Login
           </p>
+
 
           <input
             type="text"
@@ -1170,6 +1927,7 @@ useEffect(() => {
             onChange={(e) => setUsername(e.target.value)}
           />
 
+
           <input
             type="password"
             placeholder="Enter password"
@@ -1178,12 +1936,14 @@ useEffect(() => {
             onChange={(e) => setPassword(e.target.value)}
           />
 
+
           <button
             style={styles.loginBtn}
             onClick={handleLogin}
           >
             Login
           </button>
+
 
           <button
             style={styles.formBtn}
@@ -1192,54 +1952,74 @@ useEffect(() => {
             📋 Open Form
           </button>
 
+
         </div>
+
 
       </div>
 
+
     );
+
 
   }
 
+
   /* ================= FORM PAGE ================= */
 
-  const activePage = pages[currentPage];
+
+const activePage = pagesData[currentPage];
+
 
   return (
 
+
     <div style={styles.container}>
+
 
       <div style={styles.header}>
 
+
         <img src="/logo.png" alt="logo" />
+
 
         <h2 style={{ margin: 0 }}>
           💙 Muang Samui Group Room Check List
         </h2>
 
+
       </div>
+
 
       <h3 style={{ marginTop: 20 }}>
         {activePage.title}
       </h3>
 
+
       {/* PROGRESS */}
       <div style={styles.progressWrap}>
+
 
         <div
           style={{
             ...styles.progressIn,
-            width: `${((currentPage + 1) / pages.length) * 100}%`
+            width: `${((currentPage + 1) / pagesData.length) * 100}%`
           }}
         />
 
+
       </div>
+
 
       {/* FORM PAGE */}
 {activePage.type === "form" ? (
 
+
   <div style={styles.card}>
 
+
     <label>Room number หมายเลขห้อง</label>
+
 
     <input
       placeholder="Enter room number"
@@ -1253,7 +2033,9 @@ useEffect(() => {
       }
     />
 
+
     <label>Date วันที่</label>
+
 
     <input
       type="date"
@@ -1267,7 +2049,9 @@ useEffect(() => {
       }
     />
 
+
     <label>Time เวลา</label>
+
 
     <input
       type="time"
@@ -1281,10 +2065,13 @@ useEffect(() => {
       }
     />
 
+
     {/* POSITION */}
     <label>Position ตำแหน่ง</label>
 
+
     <div style={styles.dropdown}>
+
 
       <div
         style={styles.dropdownBox}
@@ -1293,9 +2080,11 @@ useEffect(() => {
         }
       >
 
+
         <span>
           {info.position || "-- Select Position --"}
         </span>
+
 
         <span
           style={{
@@ -1308,7 +2097,9 @@ useEffect(() => {
           ⌄
         </span>
 
+
       </div>
+
 
       <div
         style={{
@@ -1318,6 +2109,7 @@ useEffect(() => {
         }}
       >
 
+
         {[
           "MGR",
           "ASST.MGR",
@@ -1325,30 +2117,39 @@ useEffect(() => {
           "On behalf of head"
         ].map((item) => (
 
+
           <div
             key={item}
             style={styles.dropdownItem}
             onClick={() => {
+
 
               setInfo({
                 ...info,
                 position: item
               });
 
+
               setShowDropdown(false);
+
 
             }}
           >
             {item}
           </div>
 
+
         ))}
+
 
       </div>
 
+
     </div>
 
+
     <label>Name ชื่อผู้ตรวจ</label>
+
 
     <input
       placeholder="Enter your name"
@@ -1362,20 +2163,26 @@ useEffect(() => {
       }
     />
 
+
   </div>
+
 
 ) : (
 
+
   activePage.items.map((item, idx) => (
+
 
     <div
       key={idx}
       style={styles.card}
     >
 
+
       <b>
         {idx + 1}. {item[0]}
       </b>
+
 
       <div
         style={{
@@ -1387,6 +2194,7 @@ useEffect(() => {
         {item[1]}
       </div>
 
+
       {/* YES / NO */}
       <div
         style={{
@@ -1395,6 +2203,7 @@ useEffect(() => {
           marginTop: 15
         }}
       >
+
 
         <button
           style={{
@@ -1418,6 +2227,7 @@ useEffect(() => {
           ✅ Yes
         </button>
 
+
         <button
           style={{
             ...styles.btn,
@@ -1440,7 +2250,9 @@ useEffect(() => {
           ❌ No
         </button>
 
+
       </div>
+
 
       {/* COMMENT */}
       <input
@@ -1455,16 +2267,22 @@ useEffect(() => {
         }
       />
 
+
     </div>
+
 
   ))
 
+
 )}
+
 
       {/* NAV */}
       <div style={{ display: "flex", gap: 10 }}>
 
+
         {currentPage > 0 && (
+
 
           <button
             style={styles.navBtn}
@@ -1475,9 +2293,12 @@ useEffect(() => {
             Back
           </button>
 
+
         )}
 
-        {currentPage < pages.length - 1 ? (
+
+        {currentPage < pagesData.length - 1 ? (
+
 
           <button
             style={styles.navBtn}
@@ -1488,7 +2309,9 @@ useEffect(() => {
             Next →
           </button>
 
+
         ) : (
+
 
           <button
             style={styles.submitBtn}
@@ -1497,19 +2320,27 @@ useEffect(() => {
             Submit
           </button>
 
+
         )}
+
 
       </div>
 
+
     </div>
+
 
   );
 
+
 }
+
 
 const styles = {
 
+
   /* ================= FORM ================= */
+
 
   container: {
     maxWidth: 500,
@@ -1518,6 +2349,7 @@ const styles = {
     fontFamily: "sans-serif"
   },
 
+
   header: {
     background: "#dbeafe",
     padding: 20,
@@ -1525,10 +2357,12 @@ const styles = {
     textAlign: "center"
   },
 
+
   logo: {
     width: 100,
     marginBottom: 10
   },
+
 
   card: {
     width: "100%",
@@ -1542,6 +2376,7 @@ const styles = {
     boxShadow: "0 6px 15px rgba(59,130,246,0.08)"
   },
 
+
   input: {
     width: "100%",
     padding: 12,
@@ -1554,6 +2389,7 @@ const styles = {
     boxSizing: "border-box"
   },
 
+
   btn: {
     flex: 1,
     padding: 12,
@@ -1563,6 +2399,7 @@ const styles = {
     fontWeight: "bold",
     background: "#f1f5f9"
   },
+
 
   navBtn: {
     flex: 1,
@@ -1574,6 +2411,7 @@ const styles = {
     cursor: "pointer"
   },
 
+
   submitBtn: {
     flex: 1,
     padding: 12,
@@ -1584,6 +2422,7 @@ const styles = {
     cursor: "pointer"
   },
 
+
   progressWrap: {
     height: 5,
     background: "#eee",
@@ -1591,19 +2430,23 @@ const styles = {
     margin: "15px 0"
   },
 
+
   progressIn: {
     height: "100%",
     background: "#3b82f6",
     borderRadius: 5
   },
 
+
   /* ================= DROPDOWN ================= */
+
 
   dropdown: {
     position: "relative",
     marginTop: 8,
     marginBottom: 10
   },
+
 
   dropdownBox: {
     padding: "12px 15px",
@@ -1616,10 +2459,12 @@ const styles = {
     cursor: "pointer"
   },
 
+
   arrow: {
     transition: "0.3s",
     fontSize: 18
   },
+
 
   dropdownMenu: {
     position: "absolute",
@@ -1633,13 +2478,16 @@ const styles = {
     zIndex: 999
   },
 
+
   dropdownItem: {
     padding: "12px 15px",
     cursor: "pointer",
     borderBottom: "1px solid #f1f5f9"
   },
 
+
   /* ================= LOGIN ================= */
+
 
   loginContainer: {
     minHeight: "100vh",
@@ -1648,6 +2496,7 @@ const styles = {
     alignItems: "center",
     background: "#eff6ff"
   },
+
 
   loginCard: {
     width: "100%",
@@ -1659,6 +2508,7 @@ const styles = {
     boxShadow: "0 10px 30px rgba(0,0,0,0.08)"
   },
 
+
   loginInput: {
     width: "100%",
     padding: 14,
@@ -1668,6 +2518,7 @@ const styles = {
     outline: "none",
     boxSizing: "border-box"
   },
+
 
   loginBtn: {
     width: "100%",
@@ -1679,6 +2530,7 @@ const styles = {
     fontWeight: "bold",
     cursor: "pointer"
   },
+
 
   formBtn: {
     width: "100%",
@@ -1692,7 +2544,9 @@ const styles = {
     marginTop: 10
   },
 
+
   /* ================= REPORT ================= */
+
 
   reportCard: {
     background: "#f8fbff",
@@ -1703,12 +2557,14 @@ const styles = {
     fontSize: 14
   },
 
+
   detailPanel: {
     background: "#fff",
     padding: 20,
     borderRadius: 15,
     marginTop: 20
   },
+
 
   viewBtn: {
     padding: "7px 10px",
@@ -1720,7 +2576,9 @@ const styles = {
     cursor: "pointer"
   },
 
+
   /* ================= ADMIN ================= */
+
 
   sidebar: {
     width: 220,
@@ -1731,11 +2589,13 @@ const styles = {
     boxShadow: "0 5px 20px rgba(0,0,0,0.05)"
   },
 
+
   sidebarLogo: {
     textAlign: "center",
     marginBottom: 30,
     fontWeight: "bold"
   },
+
 
   menuItem: {
     padding: 12,
@@ -1744,6 +2604,7 @@ const styles = {
     cursor: "pointer",
     transition: "0.2s"
   },
+
 
   menuActive: {
     padding: 12,
@@ -1755,11 +2616,13 @@ const styles = {
     fontWeight: "bold"
   },
 
+
   pageBox: {
     background: "#fff",
     padding: 20,
     borderRadius: 15
   },
+
 
   statsGrid: {
     display: "grid",
@@ -1768,12 +2631,14 @@ const styles = {
     marginBottom: 25
   },
 
+
   statsCard: {
     background: "#eff6ff",
     padding: 20,
     borderRadius: 15,
     textAlign: "center"
   },
+
 
   userCard: {
     padding: 15,
@@ -1782,9 +2647,11 @@ const styles = {
     marginBottom: 10
   },
 
+
   dashboardWrap: {
     padding: 20
   },
+
 
   dashboardHeader: {
     display: "flex",
@@ -1793,11 +2660,13 @@ const styles = {
     marginBottom: 20
   },
 
+
   cardTop: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center"
   },
+
 
   fancyCardBlue: {
     background: "linear-gradient(135deg,#7dd3fc,#dbeafe)",
@@ -1806,6 +2675,7 @@ const styles = {
     boxShadow: "0 5px 15px rgba(0,0,0,0.1)"
   },
 
+
   fancyCardGreen: {
     background: "linear-gradient(135deg,#34d399,#d1fae5)",
     padding: 25,
@@ -1813,12 +2683,14 @@ const styles = {
     boxShadow: "0 5px 15px rgba(0,0,0,0.1)"
   },
 
+
   fancyCardRed: {
     background: "linear-gradient(135deg,#fb7185,#fee2e2)",
     padding: 25,
     borderRadius: 25,
     boxShadow: "0 5px 15px rgba(0,0,0,0.1)"
   },
+
 
   fancyCardDark: {
     background: "linear-gradient(135deg,#0f766e,#134e4a)",
@@ -1828,11 +2700,13 @@ const styles = {
     boxShadow: "0 5px 15px rgba(0,0,0,0.1)"
   },
 
+
   detailGrid: {
     display: "grid",
     gridTemplateColumns: "1fr 1.3fr",
     gap: 20
   },
+
 
   graphCard: {
     background: "#fff",
@@ -1841,12 +2715,14 @@ const styles = {
     boxShadow: "0 5px 15px rgba(0,0,0,0.08)"
   },
 
+
   roomCard: {
     background: "#fff",
     borderRadius: 25,
     padding: 25,
     boxShadow: "0 5px 15px rgba(0,0,0,0.08)"
   },
+
 
   fakeGraph: {
     height: 120,
@@ -1856,6 +2732,7 @@ const styles = {
     overflow: "hidden",
     marginTop: 20
   },
+
 
   graphLine: {
     position: "absolute",
@@ -1867,6 +2744,7 @@ const styles = {
     borderRadius: 20
   },
 
+
   answerBox: {
     display: "flex",
     justifyContent: "space-between",
@@ -1877,6 +2755,7 @@ const styles = {
     fontWeight: "500"
   },
 
+
   logoutBtn: {
     padding: "10px 16px",
     border: "none",
@@ -1886,11 +2765,188 @@ const styles = {
     cursor: "pointer"
   },
 
+
   adminHeader: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 20
-  }
+  },
+  container: {
+  maxWidth: 650,
+  margin: "auto",
+  padding: 25,
+  fontFamily: "Inter, sans-serif",
+  background: "#f8fafc",
+  minHeight: "100vh"
+},
+header: {
+  background: "#ffffff",
+  padding: 25,
+  borderRadius: 24,
+  textAlign: "center",
+  boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
+  border: "1px solid #e2e8f0"
+},
+card: {
+  background: "#ffffff",
+  padding: 20,
+  marginTop: 18,
+  borderRadius: 22,
+  border: "1px solid #e2e8f0",
+  boxShadow: "0 4px 15px rgba(0,0,0,0.04)"
+},
+input: {
+  width: "100%",
+  padding: 14,
+  marginTop: 10,
+  borderRadius: 14,
+  border: "1px solid #dbeafe",
+  background: "#f8fafc",
+  outline: "none",
+  fontSize: 15,
+  boxSizing: "border-box"
+},
+btn: {
+  flex: 1,
+  padding: 14,
+  border: "none",
+  borderRadius: 14,
+  cursor: "pointer",
+  fontWeight: "600",
+  fontSize: 15,
+  transition: "0.2s"
+},
+navBtn: {
+  flex: 1,
+  padding: 14,
+  border: "none",
+  borderRadius: 14,
+  background: "#2563eb",
+  color: "#fff",
+  cursor: "pointer",
+  fontWeight: "600",
+  fontSize: 15
+},
+submitBtn: {
+  flex: 1,
+  padding: 14,
+  border: "none",
+  borderRadius: 14,
+  background: "#10b981",
+  color: "#fff",
+  cursor: "pointer",
+  fontWeight: "600",
+  fontSize: 15
+},
+progressWrap: {
+  height: 8,
+  background: "#e2e8f0",
+  borderRadius: 20,
+  margin: "20px 0",
+  overflow: "hidden"
+},
+progressIn: {
+  height: "100%",
+  background:
+    "linear-gradient(90deg,#3b82f6,#60a5fa)",
+  borderRadius: 20,
+  transition: "0.3s"
+},
+loginContainer: {
+  minHeight: "100vh",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+
+  backgroundImage:
+    "linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url('/Room.png')",
+
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat"
+},
+loginCard: {
+  width: "100%",
+  maxWidth: 380,
+  background: "#fff",
+  padding: 35,
+  borderRadius: 30,
+  textAlign: "center",
+  boxShadow: "0 10px 35px rgba(0,0,0,0.08)"
+},
+loginBtn: {
+  width: "100%",
+  padding: 14,
+  border: "none",
+  borderRadius: 14,
+  background: "#2563eb",
+  color: "#fff",
+  fontWeight: "600",
+  cursor: "pointer",
+  fontSize: 15
+},
+formBtn: {
+  width: "100%",
+  padding: 14,
+  border: "none",
+  borderRadius: 14,
+  background: "#e0f2fe",
+  color: "#0369a1",
+  fontWeight: "600",
+  cursor: "pointer",
+  marginTop: 12,
+  fontSize: 15
+},
+sidebar: {
+  width: 240,
+  background: "#ffffff",
+  padding: 25,
+  borderRight: "1px solid #e2e8f0",
+  minHeight: "100vh"
+},
+menuItem: {
+  padding: 14,
+  borderRadius: 14,
+  marginBottom: 10,
+  cursor: "pointer",
+  color: "#334155",
+  transition: "0.2s"
+},
+menuActive: {
+  padding: 14,
+  borderRadius: 14,
+  marginBottom: 10,
+  cursor: "pointer",
+  background:
+    "linear-gradient(90deg,#3b82f6,#60a5fa)",
+  color: "#fff",
+  fontWeight: "600",
+  boxShadow: "0 4px 12px rgba(59,130,246,0.3)"
+},
+pageBox: {
+  background: "#ffffff",
+  padding: 25,
+  borderRadius: 25,
+  boxShadow: "0 4px 20px rgba(0,0,0,0.05)"
+},
+reportCard: {
+  background: "#ffffff",
+  padding: 18,
+  borderRadius: 18,
+  marginBottom: 15,
+  border: "1px solid #e2e8f0",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.04)"
+},
+detailPanel: {
+  background: "#ffffff",
+  padding: 25,
+  borderRadius: 22,
+  marginTop: 20,
+  border: "1px solid #e2e8f0",
+  boxShadow: "0 4px 20px rgba(0,0,0,0.05)"
+},
+
 
 };
+
