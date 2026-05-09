@@ -256,31 +256,21 @@ const [newQuestionTH, setNewQuestionTH] =
 });
 
 
-      useEffect(() => {
-
-
-        localStorage.setItem(
-          "admins",
-          JSON.stringify(admins)
-        );
-
-
-      }, [admins]);
-     useEffect(() => {
-      localStorage.setItem(
-        "roomCheckData",
-        JSON.stringify(submissions)
-      );
-    }, [submissions]);
-
-
   // โหลดข้อมูลจาก localStorage
-  const [submissions, setSubmissions] = useState(() => {
+  // โหลดข้อมูลจาก localStorage
+const [submissions, setSubmissions] = useState(() => {
   const saved = localStorage.getItem("roomCheckData");
 
   return saved ? JSON.parse(saved) : [];
 });
 
+// save ลง localStorage
+useEffect(() => {
+  localStorage.setItem(
+    "roomCheckData",
+    JSON.stringify(submissions)
+  );
+}, [submissions]);
 
   // ค้นหาห้อง
   const [searchRoom, setSearchRoom] = useState("");
